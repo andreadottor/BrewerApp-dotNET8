@@ -14,7 +14,7 @@
         /// </summary>
         public float Abv { get; init; }
 
-        public string[] FoodPairing { get; init; } = default!;
-        public string BrewersTips { get; init; } = default!;
+        public string[] FoodPairing { get; init; } = [];
+        public string? BrewersTips { get; init; }
     }
 }

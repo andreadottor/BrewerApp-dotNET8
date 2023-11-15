@@ -1,0 +1,72 @@
+﻿@page "/details/{BeerId:int}"
+@inject IBrewerService BrewerService
+
+@if (beer is not null)
+{
+    <PageTitle>@beer.Name</PageTitle>
+    <h1>@beer.Name</h1>
+    <div class="row">
+        <div class="col-2">
+            <img src="@beer.ImageUrl" alt="@beer.Name" class="img-fluid float-start" style="max-height: 500px;" />
+        </div>
+        <div class="col">
+            <h2>@beer.Tagline</h2>
+            <p>
+                @beer.Description
+            </p>
+            <hr />
+            <p>
+                Alcohol <strong>@beer.Abv %</strong><br />
+                First brewed: <strong>@beer.FirstBrewed</strong>
+            </p>
+            @if (!string.IsNullOrWhiteSpace(beer.BrewersTips))
+            {
+                <h5>Tips</h5>
+                <p>
+                    @beer.BrewersTips
+                </p>
+            }
+            @if (beer.FoodPairing.Length > 0)
+            {
+                <h5>Food pairing</h5>
+                <ul>
+                    @foreach (var item in beer.FoodPairing)
+                    {
+                        <li>@item</li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+
+    <hr />
+
+}
+else if (notFound)
+{
+    <h1>Not found</h1>
+    <div class="item-details">
+        <p>Sorry, we couldn't find any such product.</p>
+    </div>
+}
+
+@code {
+    private Beer? beer;
+    private bool notFound;
+
+    [Parameter]
+    public int BeerId { get; set; }
+
+    [CascadingParameter]
+    public HttpContext? HttpContext { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        beer = await BrewerService.GetBeerAsync(BeerId);
+        if (beer is null)
+        {
+            HttpContext!.Response.StatusCode = 404;
+            notFound = true;
+        }
+    }
+}
