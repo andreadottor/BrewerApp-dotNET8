@@ -1,4 +1,5 @@
 ﻿@inject NavigationManager Nav
+@inject IReviewsProxyService ReviewsProxy
 
 <div class="reviews">
     <h2>Add Reviews</h2>
@@ -36,24 +37,22 @@
     public Review Review { get; set; } = new Review();
 
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-
+        if(Beer is not null)
+            Reviews = await ReviewsProxy.GetReviewsAsync(Beer.Id);
     }
 
-    void AddReview()
+    private async Task AddReview()
     {
         // Handle the submitted form data
         if (Beer is not null)
         {
-            // var review = new Review
-            //     {
-            //         BeerId = Beer.Id,
-            //         Rating = Review.Rating,
-            //         Text = Review.Text
-            //     };
             Review.BeerId = Beer.Id;
             Reviews.Add(Review);
+
+            await ReviewsProxy.CreateReviewAsync(Review);
+
             Review = new Review();
             // Review.Text = string.Empty;
             // Review.Rating = 0;
