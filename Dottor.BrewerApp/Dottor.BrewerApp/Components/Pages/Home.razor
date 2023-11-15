@@ -1,7 +1,75 @@
 ﻿@page "/"
+@attribute [StreamRendering]
+@* @rendermode @(new InteractiveServerRenderMode(prerender: false)) *@
 
-<PageTitle>Home</PageTitle>
+@inject IBrewerService BrewerService
 
-<h1>Hello, world!</h1>
+<PageTitle>Beers</PageTitle>
+<SectionContent SectionName="top-bar">
+    @if (beers is not null)
+    {
+        <span>
+            <strong>@beers?.Count()</strong>
+            beers to try
+        </span>
+    }
+</SectionContent>
 
-Welcome to your new app.
+<h1>Beers</h1>
+
+<EditForm FormName="filters" Model="Filters" OnValidSubmit="FilterBeersAsync" Enhance>
+    <div class="form-group mb-3">
+        <InputText @bind-Value="Filters.Text" class="form-control" placeholder="Find beer by name..." />
+        <ValidationMessage For="@(() => Filters.Text)" />
+    </div>
+</EditForm>
+
+@if (beers is null)
+{
+    <p>loading ...</p>
+}
+else
+{
+    int index = 0;
+    foreach (var beer in beers)
+    {
+        index++;
+
+        <div class="beer-card card mb-3 @(index % 2 == 0 ? "odd" : "even")">
+            <img src="@beer.ImageUrl" alt="@beer.Name" class="card-img-top m-3" />
+            <div class="card-body">
+                <h5 class="card-title">@beer.Name</h5>
+                <p class="card-text">
+                    <strong>@beer.Tagline</strong>
+                </p>
+                <p class="card-text">
+                    @beer.Description
+                </p>
+                <a href="/Details/@beer.Id" class="btn btn-primary">Details</a>
+            </div>
+        </div>
+    }
+}
+
+@code {
+    private IEnumerable<Beer>? beers;
+
+    [SupplyParameterFromForm]
+    public FilterInput Filters { get; set; } = new FilterInput();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Filters.Text))
+            beers = await BrewerService.GetBeersAsync();
+    }
+
+    private async Task FilterBeersAsync()
+    {
+        beers = await BrewerService.GetBeersAsync(Filters.Text);
+    }
+
+    public class FilterInput
+    {
+        public string? Text { get; set; }
+    }
+}

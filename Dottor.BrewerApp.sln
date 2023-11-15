@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dottor.BrewerApp", "Dottor.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dottor.BrewerApp.Client", "Dottor.BrewerApp\Dottor.BrewerApp.Client\Dottor.BrewerApp.Client.csproj", "{9283743F-2538-47A9-889C-66F8237EFA26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dottor.BrewerApp.Common", "Dottor.BrewerApp.Common\Dottor.BrewerApp.Common.csproj", "{C08B3BC7-CD17-4542-8585-62202B929F8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dottor.BrewerApp.Common", "Dottor.BrewerApp.Common\Dottor.BrewerApp.Common.csproj", "{C08B3BC7-CD17-4542-8585-62202B929F8F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

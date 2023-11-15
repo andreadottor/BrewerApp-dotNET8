@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 public interface IBrewerService
 {
     Task<IEnumerable<Beer>> GetBeersAsync();
+    Task<IEnumerable<Beer>> GetBeersAsync(string? filterText);
 
     Task<Beer?> GetBeerAsync(int id);
 

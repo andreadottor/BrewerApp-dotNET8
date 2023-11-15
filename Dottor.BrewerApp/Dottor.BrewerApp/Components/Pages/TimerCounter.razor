@@ -1,0 +1,27 @@
+﻿@page "/timercounter"
+@attribute [StreamRendering]
+
+<PageTitle>Timer Counter</PageTitle>
+
+<h1>Timer Counter</h1>
+
+<p>
+    The count is: @count
+</p>
+
+
+
+@code {
+    private int count = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            await Task.Delay(1000);
+            count++;
+            StateHasChanged(); // Only needed to show intermediate states
+        }
+    }
+
+}

@@ -16,22 +16,19 @@ using System.Threading.Tasks;
 /// <remarks>
 /// API documentation https://punkapi.com/
 /// </remarks>
-internal class BrewerService : IBrewerService
+internal class BrewerService(IHttpClientFactory _httpClientFactory, ILogger<BrewerService> _logger) : IBrewerService
 {
     public const string BaseUrl = "https://api.punkapi.com";
     public const string HttpClientName = "Brewer";
 
-
-    private readonly IHttpClientFactory _httpClientFactory;
-    private readonly ILogger<BrewerService> _logger;
-
-    public BrewerService(IHttpClientFactory httpClientFactory, ILogger<BrewerService> logger)
+    public async Task<IEnumerable<Beer>> GetBeersAsync()
     {
-        _httpClientFactory = httpClientFactory;
-        _logger = logger;
+        await Task.Delay(2000);
+
+        return await GetBeersAsync(null);
     }
 
-    public async Task<IEnumerable<Beer>> GetBeersAsync()
+    public async Task<IEnumerable<Beer>> GetBeersAsync(string? filterText)
     {
         var client = _httpClientFactory.CreateClient(HttpClientName);
         var httpRespose = await client.GetAsync("v2/beers");
@@ -39,10 +36,14 @@ internal class BrewerService : IBrewerService
         if (httpRespose.IsSuccessStatusCode)
         {
             var list = await httpRespose.Content.ReadFromJsonAsync<BeerDto[]>();
-            if(list is null)
+            if (list is null)
                 return Enumerable.Empty<Beer>();
 
             var beers = list.Select(x => BeerMapper.Map(x));
+
+            if (!string.IsNullOrWhiteSpace(filterText))
+                beers = beers.Where(x => x.Name.Contains(filterText, StringComparison.OrdinalIgnoreCase));
+
             return beers;
         }
         else
@@ -52,6 +53,7 @@ internal class BrewerService : IBrewerService
 
         return Enumerable.Empty<Beer>();
     }
+
 
     public async Task<Beer?> GetBeerAsync(int id)
     {
@@ -79,7 +81,7 @@ internal class BrewerService : IBrewerService
     {
         var client = _httpClientFactory.CreateClient(HttpClientName);
         var httpRespose = await client.GetAsync("v2/beers/random");
-        
+
         if (httpRespose.IsSuccessStatusCode)
         {
             var list = await httpRespose.Content.ReadFromJsonAsync<BeerDto[]>();
@@ -97,4 +99,6 @@ internal class BrewerService : IBrewerService
 
         throw new Exception("Random beer API return no beer.");
     }
+
+
 }
