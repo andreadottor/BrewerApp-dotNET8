@@ -1,0 +1,63 @@
+﻿@inject NavigationManager Nav
+
+<div class="reviews">
+    <h2>Add Reviews</h2>
+    <EditForm FormName="CreateReview" class="review-editor" Model="Review" OnValidSubmit="AddReview" Enhance>
+        <StarRating @bind-Value="Review.Rating" />
+
+        <InputTextArea rows="5" placeholder="Write a review" @bind-Value="Review.Text" />
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </EditForm>
+
+    @for (int i = 0; i < Reviews.Count; i++)
+    {
+        var review = Reviews[i];
+        <div class="review">
+            <StarRating Value="review.Rating" />
+            <p>@review.Text</p>
+            @if (i < Reviews.Count - 1)
+            {
+                <hr />
+            }
+        </div>
+    }
+</div>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public Beer? Beer { get; set; }
+
+    [Parameter]
+    public IList<Review> Reviews { get; set; } = new List<Review>();
+
+    [SupplyParameterFromForm]
+    public Review Review { get; set; } = new Review();
+
+
+    protected override void OnInitialized()
+    {
+
+    }
+
+    void AddReview()
+    {
+        // Handle the submitted form data
+        if (Beer is not null)
+        {
+            // var review = new Review
+            //     {
+            //         BeerId = Beer.Id,
+            //         Rating = Review.Rating,
+            //         Text = Review.Text
+            //     };
+            Review.BeerId = Beer.Id;
+            Reviews.Add(Review);
+            Review = new Review();
+            // Review.Text = string.Empty;
+            // Review.Rating = 0;
+        }
+    }
+
+}
