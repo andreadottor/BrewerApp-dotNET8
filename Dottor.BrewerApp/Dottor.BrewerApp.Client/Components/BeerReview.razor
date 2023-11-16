@@ -1,4 +1,4 @@
-﻿@inject NavigationManager Nav
+﻿@inject NavigationManager NavigationManager
 @inject IReviewsProxyService ReviewsProxy
 
 <div class="reviews">
@@ -45,17 +45,11 @@
 
     private async Task AddReview()
     {
-        // Handle the submitted form data
         if (Beer is not null)
         {
             Review.BeerId = Beer.Id;
-            Reviews.Add(Review);
-
             await ReviewsProxy.CreateReviewAsync(Review);
-
-            Review = new Review();
-            // Review.Text = string.Empty;
-            // Review.Rating = 0;
+            NavigationManager.Refresh(forceReload: true);
         }
     }
 

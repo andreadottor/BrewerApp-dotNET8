@@ -1,0 +1,15 @@
+﻿@Dottor.BrewerApp_HostAddress = https://localhost:7190
+
+GET {{Dottor.BrewerApp_HostAddress}}/api/v1/beers/1/reviews/
+
+###
+
+POST {{Dottor.BrewerApp_HostAddress}}/api/v1/beers/1/reviews/
+Content-Type: application/json
+
+{
+  "beerId": 1,
+  "text": "Test from .http file.",
+  "rating": 3
+}
+###

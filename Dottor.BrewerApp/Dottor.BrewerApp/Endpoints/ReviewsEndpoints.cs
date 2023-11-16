@@ -17,6 +17,7 @@ public static class ReviewsEndpoints
              .WithName("GetReviewAsync")
              .WithSummary("Get beers review's")
              .WithDescription("Return reviews of the specified beer");
+
         group.MapPost("", CreateReviewAsync)
             .WithName("CreateReviewAsync")
              .WithSummary("Create beer review")

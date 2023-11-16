@@ -33,7 +33,7 @@ internal class ReviewsService : IReviewsService, IDisposable
         return _db.GetCollection<Review>("reviews")
                   .Query()
                   .Where(x => x.BeerId == query.BeerId)
-                  .OrderBy(x => x.CreationDate)
+                  .OrderByDescending(x => x.CreationDate)
                   .ToList();
     }
 
