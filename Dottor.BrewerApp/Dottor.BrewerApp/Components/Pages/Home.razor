@@ -57,10 +57,15 @@ else
     [SupplyParameterFromForm]
     public FilterInput Filters { get; set; } = new FilterInput();
 
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
     protected override async Task OnInitializedAsync()
     {
-        if (string.IsNullOrWhiteSpace(Filters.Text))
+        if (HttpMethods.IsGet(HttpContext.Request.Method))
+        {
             beers = await BrewerService.GetBeersAsync();
+        }
     }
 
     private async Task FilterBeersAsync()
