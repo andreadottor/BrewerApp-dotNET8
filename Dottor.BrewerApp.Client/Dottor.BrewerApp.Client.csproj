@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Dottor.BrewerApp.Common\Dottor.BrewerApp.Common.csproj" />
+    <ProjectReference Include="..\Dottor.BrewerApp.Common\Dottor.BrewerApp.Common.csproj" />
   </ItemGroup>
 
 </Project>
